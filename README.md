@@ -1,2 +1,3 @@
-# BrabIT-Website
-Develop BrabIT’s main website
+# brabit
+
+The main website of BrabIT
