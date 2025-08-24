@@ -8,6 +8,7 @@
 body {
     line-height: 1.6;
     color: #333;
+    background-color: #fff;
 }
 
 .container {
@@ -18,7 +19,7 @@ body {
 }
 
 header {
-    background: #2c3e50;
+    background: rgb(35, 13, 196);
     color: #fff;
     text-align: center;
     padding: 4rem 0;
@@ -36,17 +37,19 @@ header p {
 
 .btn {
     display: inline-block;
-    background: #3498db;
-    color: #fff;
+    background: #fff;
+    color: rgb(35, 13, 196);
     padding: 0.8rem 1.5rem;
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
-    transition: background 0.3s;
+    transition: all 0.3s;
+    border: 2px solid #fff;
 }
 
 .btn:hover {
-    background: #2980b9;
+    background: rgb(35, 13, 196);
+    color: #fff;
 }
 
 #services, #about, #testimonials, #contact {
@@ -57,6 +60,7 @@ header p {
     text-align: center;
     margin-bottom: 2rem;
     font-size: 2rem;
+    color: rgb(35, 13, 196);
 }
 
 .services-grid {
@@ -66,15 +70,16 @@ header p {
 }
 
 .service {
-    background: #f4f4f4;
+    background: #f8f9fa;
     padding: 2rem;
     border-radius: 5px;
     text-align: center;
+    border: 1px solid #e9ecef;
 }
 
 .service i {
     font-size: 2.5rem;
-    color: #3498db;
+    color: rgb(35, 13, 196);
     margin-bottom: 1rem;
 }
 
@@ -96,9 +101,10 @@ header p {
 }
 
 .testimonial {
-    background: #f4f4f4;
+    background: #f8f9fa;
     padding: 2rem;
     border-radius: 5px;
+    border: 1px solid #e9ecef;
 }
 
 #contact form {
@@ -113,6 +119,7 @@ header p {
     padding: 0.8rem;
     border: 1px solid #ddd;
     border-radius: 5px;
+    font-size: 1rem;
 }
 
 #contact textarea {
@@ -120,7 +127,7 @@ header p {
 }
 
 footer {
-    background: #2c3e50;
+    background: rgb(35, 13, 196);
     color: #fff;
     text-align: center;
     padding: 2rem 0;
@@ -134,6 +141,11 @@ footer {
     color: #fff;
     margin: 0 0.5rem;
     font-size: 1.5rem;
+    transition: color 0.3s;
+}
+
+.social-links a:hover {
+    color: #f0f0f0;
 }
 
 @media (max-width: 768px) {
