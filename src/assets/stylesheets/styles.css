@@ -148,6 +148,39 @@ footer {
     color: #f0f0f0;
 }
 
+li {
+    margin-left: 2rem;
+}
+
+.hero-overlay .container {
+    text-align: center;
+    color: #fff;
+    padding: 0 1rem;
+}
+
+/* .logo {
+    max-width: 400px;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+    background-color: black;
+}
+.logo-2 {
+    max-width: 200px;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.logo-3 {
+    max-width: 200px;
+    margin-bottom: 1.5rem;
+    filter: invert(0)
+} */
+
+
+
 @media (max-width: 768px) {
     .about-content {
         flex-direction: column;
