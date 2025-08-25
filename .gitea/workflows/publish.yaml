@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest:host
+    runs-on: ubuntu-22.04:host
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
