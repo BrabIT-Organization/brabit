@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      - run: echo "💡 The ${{ gitea.repository }} repository has been cloned to the runner."
+      - run: echo "💡 The ${{ gitea.repository }} repository, ${{ gitea.ref-name}} branch has been cloned to the runner."
       - name: Deploy to Local hosting
-        run: mv src/* /data/web/${{ gitea.ref-name }}
+        run: ls -Al && ls -Al .. && mv src/* /data/web/${{ gitea.ref-name }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
