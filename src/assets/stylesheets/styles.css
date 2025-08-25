@@ -1,3 +1,13 @@
+ /* Global variables */
+:root {
+    /* Colors */
+  --light: #F5F5F5;
+  --dark: #121212;
+  --standard-color: rgb(35, 13, 196);
+  color-scheme: light dark;
+}
+
+/* Basics */
 * {
     margin: 0;
     padding: 0;
@@ -7,8 +17,20 @@
 
 body {
     line-height: 1.6;
-    color: #333;
-    background-color: #fff;
+    --color: light-dark(var(--dark), var(--light));
+    --background-color: light-dark(var(--light), var(--dark));
+    color: var(--color);
+    background-color: var(--background-color);
+}
+
+
+p {
+    --color: light-dark(var(--dark), var(--light));
+    color: var(--color);
+}
+
+input,textarea {
+  color: var(--dark);
 }
 
 .container {
@@ -19,8 +41,7 @@ body {
 }
 
 header {
-    background: rgb(35, 13, 196);
-    color: #fff;
+    background: var(--standard-color);
     text-align: center;
     padding: 4rem 0;
 }
@@ -28,28 +49,30 @@ header {
 header h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
+    color: var(--light);
 }
 
 header p {
     font-size: 1.2rem;
     margin-bottom: 2rem;
+    color: var(--light);
 }
 
 .btn {
     display: inline-block;
-    background: #fff;
-    color: rgb(35, 13, 196);
+    background: var(--light);
+    color: light-dark(var(--standard-color), var(--dark));
     padding: 0.8rem 1.5rem;
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
     transition: all 0.3s;
-    border: 2px solid #fff;
+    border: 2px solid var(--light);
 }
 
 .btn:hover {
-    background: rgb(35, 13, 196);
-    color: #fff;
+    background: var(--standard-color);
+    color: var(--light);
 }
 
 #services, #about, #testimonials, #contact {
@@ -60,7 +83,7 @@ header p {
     text-align: center;
     margin-bottom: 2rem;
     font-size: 2rem;
-    color: rgb(35, 13, 196);
+    color: light-dark(var(--standard-color), var(--light));
 }
 
 .services-grid {
@@ -70,16 +93,16 @@ header p {
 }
 
 .service {
-    background: #f8f9fa;
+    background: light-dark(var(--light), var(--dark));
     padding: 2rem;
     border-radius: 5px;
     text-align: center;
-    border: 1px solid #e9ecef;
+    border: 1px solid light-dark(var(--dark), var(--light));
 }
 
 .service i {
     font-size: 2.5rem;
-    color: rgb(35, 13, 196);
+    color: light-dark(var(--standard-color), var(--light));
     margin-bottom: 1rem;
 }
 
@@ -101,10 +124,10 @@ header p {
 }
 
 .testimonial {
-    background: #f8f9fa;
+    background: light-dark(var(--light), var(--dark));
     padding: 2rem;
     border-radius: 5px;
-    border: 1px solid #e9ecef;
+    border: 1px solid light-dark(var(--light), var(--dark));
 }
 
 #contact form {
@@ -117,20 +140,37 @@ header p {
 #contact input, #contact textarea {
     width: 100%;
     padding: 0.8rem;
-    border: 1px solid #ddd;
+    border: 1px solid light-dark(var(--dark), var(--light));
     border-radius: 5px;
     font-size: 1rem;
+    background-color: light-dark(var(--light), var(--light));
 }
 
 #contact textarea {
     height: 150px;
 }
 
+#contact .btn {
+    background: var(--light);
+    color: light-dark(var(--standard-color), var(--dark));
+    border-color: var(--dark);
+}
+
+#contact .btn:hover {
+    background: light-dark(var(--standard-color), var(--dark));
+    color: var(--light);
+    border-color: var(--light);
+}
+
 footer {
-    background: rgb(35, 13, 196);
-    color: #fff;
+    background: var(--standard-color);
+    color: light-dark(var(--dark), var(--light));
     text-align: center;
     padding: 2rem 0;
+}
+
+footer p {
+    color: var(--light);
 }
 
 .social-links {
@@ -138,14 +178,14 @@ footer {
 }
 
 .social-links a {
-    color: #fff;
+    color: var(--light);
     margin: 0 0.5rem;
     font-size: 1.5rem;
     transition: color 0.3s;
 }
 
 .social-links a:hover {
-    color: #f0f0f0;
+    color: var(--dark);
 }
 
 li {
@@ -154,32 +194,11 @@ li {
 
 .hero-overlay .container {
     text-align: center;
-    color: #fff;
+    color: light-dark(var(--light), var(--dark));
     padding: 0 1rem;
 }
 
-/* .logo {
-    max-width: 400px;
-    margin-bottom: 1.5rem;
-    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
-    background-color: black;
-}
-.logo-2 {
-    max-width: 200px;
-    margin-bottom: 1.5rem;
-    padding: 0.5rem;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.logo-3 {
-    max-width: 200px;
-    margin-bottom: 1.5rem;
-    filter: invert(0)
-} */
-
-
+/* Mobile */
 
 @media (max-width: 768px) {
     .about-content {
