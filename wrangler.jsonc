@@ -1,6 +1,6 @@
 {
 	"name": "build-worker",
-	"pages_build_output_dir": "./dist",
+	"pages_build_output_dir": "./src",
 	"compatibility_date": "2025-08-26",
 	"compatibility_flags": [
 		"nodejs_compat"
