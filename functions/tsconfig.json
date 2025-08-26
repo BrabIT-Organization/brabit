@@ -3,6 +3,7 @@
     "target": "esnext",
     "module": "esnext",
     "lib": ["esnext"],
-    "types": ["./types.d.ts", "node"]
+    "types": ["./types.d.ts", "node"],
+    "moduleResolution": "node"
   }
 }
