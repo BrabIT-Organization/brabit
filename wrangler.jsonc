@@ -11,7 +11,20 @@
 			"id": "88918d30a7a948179d1ba94410b264f6"
 		}
 	],
-  "assets": {
-    "directory": "./src"
-  }
+  	"assets": {
+    	"directory": "./src"
+  	},
+	"vars": {
+		// Comma-separated list of allowed origins for CORS
+		// In production, set this to your actual domain(s)
+		"ALLOWED_ORIGINS": "https://brabit.be,https://www.brabit.be",
+		
+		"MIN_NAME_LENGTH": 2,
+		"MAX_NAME_LENGTH": 200,
+		"MIN_MESSAGE_LENGTH": 50,
+		"MAX_MESSAGE_LENGTH": 8000,
+
+		"RATE_LIMIT_WINDOW_SECONDS": 60,
+		"MAX_REQUESTS_PER_IP": 5
+  	}
 }
