@@ -1,0 +1,14 @@
+{
+	"name": "build-worker",
+	"pages_build_output_dir": "./dist",
+	"compatibility_date": "2025-08-26",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"kv_namespaces": [
+		{
+			"binding": "brabit",
+			"id": "88918d30a7a948179d1ba94410b264f6"
+		}
+	]
+}
