@@ -1,5 +1,13 @@
-document.getElementById('contact-form').addEventListener('submit', function(e) {
+const form = document.querySelector('#contact-form');
+form.addEventListener('submit', async function(e) {
     e.preventDefault();
-    alert('Thank you for your message! I will get back to you soon.');
+    const data = new FormData(form);
+    const request = new Request('/api/contact', {
+        method: 'POST',
+        body: data
+    });
+    const response = await fetch(request);
+    const result = await response.text();
+    alert(result);
     this.reset();
-});
+})
