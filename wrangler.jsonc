@@ -1,5 +1,5 @@
 {
-	"name": "build-worker",
+	"name": "brabit",
 	"pages_build_output_dir": "./src",
 	"compatibility_date": "2025-08-26",
 	"compatibility_flags": [
