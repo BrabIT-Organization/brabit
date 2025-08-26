@@ -10,5 +10,8 @@
 			"binding": "brabit",
 			"id": "88918d30a7a948179d1ba94410b264f6"
 		}
-	]
+	],
+  "assets": {
+    "directory": "./src"
+  }
 }
