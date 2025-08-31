@@ -1,16 +1,16 @@
 import { StatusCodes } from "http-status-codes";
 
 interface Contact {
-    name: string,
-    email: string,
-    message: string
+  name: string,
+  email: string,
+  message: string
 }
 
 function getCorsHeaders(request, env) {
   const origin = request.headers.get("Origin") || "";
   const allowedOrigins = env.ALLOWED_ORIGINS
-    ? env.ALLOWED_ORIGINS.split(",").map((o: string) => o.trim())
-    : ["http://localhost:8788"];
+  ? env.ALLOWED_ORIGINS.split(",").map((o: string) => o.trim())
+  : ["http://localhost:8788"];
 
   let allowedOrigin = allowedOrigins.find((allowed: string) => origin.startsWith(allowed));
 
@@ -91,7 +91,7 @@ async function parseFormData(request: Request) : Promise<Contact> {
       name: formData.get("name")?.toString(),
       email: formData.get("email")?.toString(),
       message: formData.get("message")?.toString(),
-    //   "cf-turnstile-response": formData.get("cf-turnstile-response"),
+      //   "cf-turnstile-response": formData.get("cf-turnstile-response"),
     };
   }
 
@@ -125,9 +125,29 @@ function validateFormFields(contact: Contact, env) {
   return { valid: true };
 }
 
+function createEmailRequest({name, email, message}, token: string): Request {
+  const POSTMARK_URL = "https://api.postmarkapp.com/email";
+  return new Request(POSTMARK_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Postmark-Server-Token": token
+    },
+    body: JSON.stringify({
+      From: "contact@brabit.be",
+      To: "info@brabit.be",
+      Subject: "Contact verzoek",
+      HtmlBody: ``+
+      `<p>Naam: ${name}</p>`+
+      `<p>Email: ${email}</p>`+
+      `<p>Vraag: ${message}</p>`
+    })
+  });
+}
+
 export const onRequestPost: PagesFunction<Env> = async({request, env}) => {
-    const corsHeaders = getCorsHeaders(request, env);
-    try {
+  const corsHeaders = getCorsHeaders(request, env);
+  try {
     const clientIp = request.headers.get("CF-Connecting-IP") || "unknown";
 
     // if (!env.CONTACT_SUBMISSIONS) {
@@ -181,15 +201,29 @@ export const onRequestPost: PagesFunction<Env> = async({request, env}) => {
       return createJsonResponse({ error: validation.error }, StatusCodes.BAD_REQUEST, corsHeaders);
     }
     const timestamp = Date.now();
-    return createJsonResponse(
-      {
-        success: true,
-        message: "Your message has been sent successfully!",
-        timestamp: new Date(timestamp).toISOString()
-      },
-      StatusCodes.OK,
-      corsHeaders
-    );
+    const emailRequest = createEmailRequest(result?.contact, this.env.POSTMARK_API_TOKEN);
+    const response = await fetch(emailRequest);
+    if (response.status != StatusCodes.OK) {
+      return createJsonResponse(
+        {
+          success: false,
+          message: "Something went wrong when sending the email: " + (await response.json()),
+          timestamp: new Date(timestamp).toISOString()
+        },
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        corsHeaders
+      );
+    } else {
+      return createJsonResponse(
+        {
+          success: true,
+          message: "Your message has been sent successfully!",
+          timestamp: new Date(timestamp).toISOString()
+        },
+        StatusCodes.OK,
+        corsHeaders
+      );
+    }
   } catch (error) {
     console.error("Error processing contact form:", error);
 
