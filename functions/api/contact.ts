@@ -6,7 +6,7 @@ interface Contact {
   message: string
 }
 
-function getCorsHeaders(request, env) {
+function getCorsHeaders(request: Request, env: Env) {
   const origin = request.headers.get("Origin") || "";
   const allowedOrigins = env.ALLOWED_ORIGINS
   ? env.ALLOWED_ORIGINS.split(",").map((o: string) => o.trim())
@@ -43,22 +43,22 @@ export async function onRequestOptions({ request, env }) {
   });
 }
 
-async function checkRateLimit(env, clientIp: string) {
-  const rateLimitWindowSeconds = (env.RATE_LIMIT_WINDOW_SECONDS || 60) * 1000;
-  const maxRequestsPerIP = env.MAX_REQUESTS_PER_IP || 5;
-  const rateLimitKey = `ratelimit-${clientIp}`;
-  const attempts = await env.CONTACT_SUBMISSIONS.get(rateLimitKey);
+// async function checkRateLimit(env: Env, clientIp: string) {
+//   const rateLimitWindowSeconds = (env.RATE_LIMIT_WINDOW_SECONDS || 60) * 1000;
+//   const maxRequestsPerIP = env.MAX_REQUESTS_PER_IP || 5;
+//   const rateLimitKey = `ratelimit-${clientIp}`;
+//   const attempts = await env.CONTACT_SUBMISSIONS.get(rateLimitKey);
 
-  if (attempts && parseInt(attempts) >= maxRequestsPerIP) {
-    return { limited: true };
-  }
+//   if (attempts && parseInt(attempts) >= maxRequestsPerIP) {
+//     return { limited: true };
+//   }
 
-  await env.CONTACT_SUBMISSIONS.put(rateLimitKey, String((parseInt(attempts) || 0) + 1), {
-    expirationTtl: rateLimitWindowSeconds / 1000,
-  });
+//   await env.CONTACT_SUBMISSIONS.put(rateLimitKey, String((parseInt(attempts) || 0) + 1), {
+//     expirationTtl: rateLimitWindowSeconds / 1000,
+//   });
 
-  return { limited: false };
-}
+//   return { limited: false };
+// }
 
 async function verifyTurnstile(token: string, secretKey: string, clientIp: string) {
   const verifyUrl = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
@@ -79,26 +79,28 @@ async function verifyTurnstile(token: string, secretKey: string, clientIp: strin
   return result.success === true;
 }
 
-async function parseFormData(request: Request) : Promise<Contact> {
+async function parseFormData(request: Request) : Promise<{contact: Contact, turnstileToken: string}> {
   const contentType = request.headers.get("Content-Type") || "";
 
   if (contentType.includes("application/json")) {
     return await request.json();
   } else if (contentType.includes("form-data") || contentType.includes("x-www-form-urlencoded")) {
     const formData = await request.formData();
-
-    return {
+    const contact: Contact = {
       name: formData.get("name")?.toString(),
       email: formData.get("email")?.toString(),
-      message: formData.get("message")?.toString(),
-      //   "cf-turnstile-response": formData.get("cf-turnstile-response"),
+      message: formData.get("message")?.toString()
+    }
+    return {
+      contact,
+      turnstileToken: formData.get("cf-turnstile-response")?.toString(),
     };
   }
 
   return null;
 }
 
-function validateFormFields(contact: Contact, env) {
+function validateFormFields(contact: Contact, env: Env) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const minNameLength = env.MIN_NAME_LENGTH || 2;
   const maxNameLength = env.MAX_NAME_LENGTH || 200;
@@ -158,21 +160,20 @@ export const onRequestPost: PagesFunction<Env> = async({request, env}) => {
     //   );
     // }
 
-    const rateLimitResult = await checkRateLimit(env, clientIp);
-    if (rateLimitResult.limited) {
-      return createJsonResponse(
-        { error: "Too many requests. Please try again later." },
-        StatusCodes.TOO_MANY_REQUESTS,
-        corsHeaders
-      );
-    }
+    // const rateLimitResult = await checkRateLimit(env, clientIp);
+    // if (rateLimitResult.limited) {
+    //   return createJsonResponse(
+    //     { error: "Too many requests. Please try again later." },
+    //     StatusCodes.TOO_MANY_REQUESTS,
+    //     corsHeaders
+    //   );
+    // }
 
-    const formData = await parseFormData(request);
-    if (!formData) {
+    const {contact, turnstileToken} = await parseFormData(request);
+    if (!contact) {
       return createJsonResponse({ error: "Unsupported content type" }, StatusCodes.BAD_REQUEST, corsHeaders);
     }
     // Verify Turnstile token
-    const turnstileToken = formData["cf-turnstile-response"];
     if (!turnstileToken) {
       return createJsonResponse(
         { error: "Please complete the security challenge" },
@@ -191,7 +192,7 @@ export const onRequestPost: PagesFunction<Env> = async({request, env}) => {
         );
       }
     }
-    let { name, email, message } = formData;
+    let { name, email, message } = contact;
     name = (name || "").trim();
     email = (email || "").trim();
     message = (message || "").trim();
@@ -201,7 +202,7 @@ export const onRequestPost: PagesFunction<Env> = async({request, env}) => {
       return createJsonResponse({ error: validation.error }, StatusCodes.BAD_REQUEST, corsHeaders);
     }
     const timestamp = Date.now();
-    const emailRequest = createEmailRequest(result?.contact, this.env.POSTMARK_API_TOKEN);
+    const emailRequest = createEmailRequest(contact, env.POSTMARK_API_TOKEN);
     const response = await fetch(emailRequest);
     if (response.status != StatusCodes.OK) {
       return createJsonResponse(
