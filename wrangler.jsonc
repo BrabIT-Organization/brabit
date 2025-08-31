@@ -1,5 +1,5 @@
 {
-	"name": "brabit",
+	"name": "brabit-website",
 	"pages_build_output_dir": "./src",
 	"compatibility_date": "2025-08-26",
 	"compatibility_flags": [
@@ -11,9 +11,6 @@
 			"id": "88918d30a7a948179d1ba94410b264f6"
 		}
 	],
-  	"assets": {
-    	"directory": "./src"
-  	},
 	"vars": {
 		// Comma-separated list of allowed origins for CORS
 		// In production, set this to your actual domain(s)
