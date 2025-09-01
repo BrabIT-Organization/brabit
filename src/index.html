@@ -109,11 +109,37 @@
         <section id="contact">
             <div class="container">
                 <h2>Contacteer ons</h2>
-                <form id="contact-form">
-                    <div class="cf-turnstile" data-sitekey="0x4AAAAAABw2sAPeIBnOtv1A"></div>
-                    <input type="text" placeholder="Uw naam" name="name" required>
-                    <input type="email" placeholder="Uw e-mail adres" name="email" required>
-                    <textarea placeholder="Uw vraag" name="description" required></textarea>
+                <form id="contact-form" method="POST" autocomplete="on">
+                    <label for="name">Uw naam</label>
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        autocomplete="name"
+                        required
+                    >
+                    <label for="email">Uw e-mail adres</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        autocomplete="email"
+                        required
+                    >
+                    <label for="message" >Uw bericht</label>
+                    <textarea
+                        name="message"
+                        id="message"
+                        rows="5"
+                        cols="20"
+                        minlength="10"
+                        maxlength="500"
+                        required></textarea>
+                    <div
+                        class="cf-turnstile"
+                        data-sitekey="0x4AAAAAABw2sAPeIBnOtv1A"
+                    >
+                    </div>
                     <button type="submit" class="btn">Stuur een bericht</button>
                 </form>
             </div>
