@@ -104,8 +104,8 @@ function validateFormFields(contact: Contact, env: Env) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const minNameLength = env.MIN_NAME_LENGTH || 2;
   const maxNameLength = env.MAX_NAME_LENGTH || 200;
-  const minMessageLength = env.MIN_MESSAGE_LENGTH || 50;
-  const maxMessageLength = env.MAX_MESSAGE_LENGTH || 8000;
+  const minMessageLength = env.MIN_MESSAGE_LENGTH || 10;
+  const maxMessageLength = env.MAX_MESSAGE_LENGTH || 500;
 
   const {name, email, message} = contact;
   if (!name || !email || !message) {
