@@ -109,19 +109,19 @@ function validateFormFields(contact: Contact, env: Env) {
 
   const {name, email, message} = contact;
   if (!name || !email || !message) {
-    return { error: "All fields are required" };
+    return { error: "Gelieve alle velden in te vullen" };
   }
 
   if (!emailRegex.test(email)) {
-    return { error: "Invalid email address" };
+    return { error: "Ongeld e-mail adres" };
   }
 
   if (name.length < minNameLength || name.length > maxNameLength) {
-    return { error: `Name must be between ${minNameLength} and ${maxNameLength} characters` };
+    return { error: `Uw naam moet tussen ${minNameLength} en ${maxNameLength} tekens lang zijn` };
   }
 
   if (message.length < minMessageLength || message.length > maxMessageLength) {
-    return { error: `Message must be between ${minMessageLength} and ${maxMessageLength} characters` };
+    return { error: `Uw vraag moet tussen  ${minMessageLength} en ${maxMessageLength} tekens lang zijn` };
   }
 
   return { valid: true };
@@ -171,12 +171,12 @@ export const onRequestPost: PagesFunction<Env> = async({request, env}) => {
 
     const {contact, turnstileToken} = await parseFormData(request);
     if (!contact) {
-      return createJsonResponse({ error: "Unsupported content type" }, StatusCodes.BAD_REQUEST, corsHeaders);
+      return createJsonResponse({ error: "Geen contact info gevonden" }, StatusCodes.BAD_REQUEST, corsHeaders);
     }
     // Verify Turnstile token
     if (!turnstileToken) {
       return createJsonResponse(
-        { error: "Please complete the security challenge" },
+        { error: "Gelieve de security challenge te voltooien" },
         StatusCodes.BAD_REQUEST,
         corsHeaders
       );
@@ -186,7 +186,7 @@ export const onRequestPost: PagesFunction<Env> = async({request, env}) => {
       const isValidToken = await verifyTurnstile(turnstileToken, env.TURNSTILE_SECRET_KEY, clientIp);
       if (!isValidToken) {
         return createJsonResponse(
-          { error: "Security challenge verification failed. Please try again." },
+          { error: "Het lukte niet om de security challenge te verifiëren. Probeer opnieuw." },
           StatusCodes.BAD_REQUEST,
           corsHeaders
         );
@@ -208,7 +208,7 @@ export const onRequestPost: PagesFunction<Env> = async({request, env}) => {
       return createJsonResponse(
         {
           success: false,
-          message: "Something went wrong when sending the email: " + (await response.json()),
+          message: "Er ging iets mis bij het versturen van de e-mail: " + (await response.json()),
           timestamp: new Date(timestamp).toISOString()
         },
         StatusCodes.INTERNAL_SERVER_ERROR,
@@ -218,7 +218,7 @@ export const onRequestPost: PagesFunction<Env> = async({request, env}) => {
       return createJsonResponse(
         {
           success: true,
-          message: "Your message has been sent successfully!",
+          message: "Uw bericht is successvol verzonden. Wij nemen snel contact met u op!",
           timestamp: new Date(timestamp).toISOString()
         },
         StatusCodes.OK,
@@ -229,7 +229,7 @@ export const onRequestPost: PagesFunction<Env> = async({request, env}) => {
     console.error("Error processing contact form:", error);
 
     return createJsonResponse(
-      { error: "An internal error occurred. Please try again later." },
+      { error: "Er heeft zich een interne fout voorgedaan. Probeer later opnieuw." },
       StatusCodes.INTERNAL_SERVER_ERROR,
       corsHeaders
     );
