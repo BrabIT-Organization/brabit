@@ -8,12 +8,22 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
         <link rel="icon" type="image/svg+xml" href="assets/images/company-logo-short.svg">
         <link rel="mask-icon" href="assets/images/company-logo-short.svg">
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" as="script" defer></script>
     </head>
     <body>
         <header>
             <div class="hero-overlay">
                 <div class="container">
-                    <!-- <img src="assets/images/company-logo-full-black.webp" alt="Company Logo" class="logo-3"> -->
+                    <picture class="hero-image">
+                    <!-- User prefers light mode: -->
+                        <source srcset="./assets/images/company-logo-full-black.webp" media="(prefers-color-scheme: light)"/>
+
+                        <!-- User prefers dark mode: -->
+                        <source srcset="./assets/images/company-logo-full-white.webp"  media="(prefers-color-scheme: dark)"/>
+
+                        <!-- User has no color preference: -->
+                        <img src="./assets/images/company-logo-full-black.webp" alt="BrabIT Logo" style="max-width: 400px;">
+                    </picture>
                     <h1>Experten in IT consulting</h1>
                     <p>IT ondersteuning en advies op maat</p>
                     <a href="#contact" class="btn">Contacteer ons!</a>
@@ -85,10 +95,12 @@
                     <div class="testimonial">
                         <p>"Professional, responsive, and always delivers on time. A true IT partner."</p>
                         <h4>- Lionel Gossa, Sibelga</h4>
+                        <small><i class="fa-solid fa-location"></i>Brussel</small>
                     </div>
                     <div class="testimonial">
                         <p>"BrabIT transformed our IT infrastructure, saving us time and money. Highly recommended!"</p>
                         <h4>- Peter Flamey, Verhelst Flamey Advocaten</h4>
+                        <small><i class="fa-solid fa-location"></i>Antwerpen</small>
                     </div>
                 </div>
             </div>
@@ -96,13 +108,41 @@
         
         <section id="contact">
             <div class="container">
-                <h2>Contacteer ons nu</h2>
-                <form id="contact-form">
-                    <input type="text" placeholder="Uw naam" required>
-                    <input type="email" placeholder="Uw e-mail adres" required>
-                    <textarea placeholder="Uw vraag" required></textarea>
+                <h2>Contacteer ons</h2>
+                <form id="contact-form" method="POST" autocomplete="on" name="contact-form">
+                    <label for="name">Uw naam</label>
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        autocomplete="name"
+                        required
+                    >
+                    <label for="email">Uw e-mail adres</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        autocomplete="email"
+                        required
+                    >
+                    <label for="message" >Uw bericht</label>
+                    <textarea
+                        name="message"
+                        id="message"
+                        rows="5"
+                        cols="20"
+                        minlength="10"
+                        maxlength="500"
+                        required></textarea>
+                    <div
+                        class="cf-turnstile"
+                        data-sitekey="0x4AAAAAABw2sAPeIBnOtv1A"
+                    >
+                    </div>
                     <button type="submit" class="btn">Stuur een bericht</button>
                 </form>
+                <span id="result" style="display: none;"></span>
             </div>
         </section>
         

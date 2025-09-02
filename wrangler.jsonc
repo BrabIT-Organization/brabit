@@ -1,0 +1,27 @@
+{
+	"name": "brabit-website",
+	"pages_build_output_dir": "./src",
+	"compatibility_date": "2025-08-26",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"kv_namespaces": [
+		{
+			"binding": "brabit",
+			"id": "88918d30a7a948179d1ba94410b264f6"
+		}
+	],
+	"vars": {
+		// Comma-separated list of allowed origins for CORS
+		// In production, set this to your actual domain(s)
+		"ALLOWED_ORIGINS": "https://brabit.be,https://www.brabit.be",
+		
+		"MIN_NAME_LENGTH": 2,
+		"MAX_NAME_LENGTH": 200,
+		"MIN_MESSAGE_LENGTH": 10,
+		"MAX_MESSAGE_LENGTH": 500,
+
+		"RATE_LIMIT_WINDOW_SECONDS": 60,
+		"MAX_REQUESTS_PER_IP": 5
+  	}
+}

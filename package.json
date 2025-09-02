@@ -1,0 +1,33 @@
+{
+  "name": "brabit",
+  "version": "1.0.0",
+  "description": "The website of BrabIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "wrangler pages deploy",
+    "dev": "wrangler pages dev",
+    "build": "wrangler pages build",
+    "generate-types": "wrangler types",
+    "type-check": "generate-types && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrabIT-Organization/brabit.git"
+  },
+  "keywords": [
+    "website"
+  ],
+  "author": "BrabIT",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrabIT-Organization/brabit/issues"
+  },
+  "homepage": "https://github.com/BrabIT-Organization/brabit#readme",
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "wrangler": "^4.33.0"
+  },
+  "dependencies": {
+    "http-status-codes": "^2.3.0"
+  }
+}

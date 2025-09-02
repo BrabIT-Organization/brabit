@@ -131,3 +131,7 @@ dist
 
 # OS specific files
 .DS_Store
+
+# wrangler
+.wrangler/
+.dev.vars*

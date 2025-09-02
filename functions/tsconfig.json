@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["esnext"],
+    "types": ["./worker-configuration.d.ts", "node"],
+    "moduleResolution": "node"
+  }
+}

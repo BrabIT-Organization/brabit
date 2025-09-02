@@ -1,0 +1,237 @@
+import { StatusCodes } from "http-status-codes";
+
+interface Contact {
+  name: string,
+  email: string,
+  message: string
+}
+
+function getCorsHeaders(request: Request, env: Env) {
+  const origin = request.headers.get("Origin") || "";
+  const allowedOrigins = env.ALLOWED_ORIGINS
+  ? env.ALLOWED_ORIGINS.split(",").map((o: string) => o.trim())
+  : ["http://localhost:8788"];
+
+  let allowedOrigin = allowedOrigins.find((allowed: string) => origin.startsWith(allowed));
+
+  if (!allowedOrigin && origin.match(/^http:\/\/localhost:\d+$/)) {
+    allowedOrigin = origin;
+  }
+
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin || allowedOrigins[0],
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, X-API-Key",
+    "Access-Control-Max-Age": "86400",
+  };
+}
+
+function createJsonResponse(data, status = StatusCodes.OK, corsHeaders = {}) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      ...corsHeaders,
+    },
+  });
+}
+
+export async function onRequestOptions({ request, env }) {
+  return new Response(null, {
+    status: StatusCodes.NO_CONTENT,
+    headers: getCorsHeaders(request, env),
+  });
+}
+
+// async function checkRateLimit(env: Env, clientIp: string) {
+//   const rateLimitWindowSeconds = (env.RATE_LIMIT_WINDOW_SECONDS || 60) * 1000;
+//   const maxRequestsPerIP = env.MAX_REQUESTS_PER_IP || 5;
+//   const rateLimitKey = `ratelimit-${clientIp}`;
+//   const attempts = await env.CONTACT_SUBMISSIONS.get(rateLimitKey);
+
+//   if (attempts && parseInt(attempts) >= maxRequestsPerIP) {
+//     return { limited: true };
+//   }
+
+//   await env.CONTACT_SUBMISSIONS.put(rateLimitKey, String((parseInt(attempts) || 0) + 1), {
+//     expirationTtl: rateLimitWindowSeconds / 1000,
+//   });
+
+//   return { limited: false };
+// }
+
+async function verifyTurnstile(token: string, secretKey: string, clientIp: string) {
+  const verifyUrl = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+
+  const formData = new FormData();
+  formData.append("secret", secretKey);
+  formData.append("response", token);
+  if (clientIp) {
+    formData.append("remoteip", clientIp);
+  }
+
+  const response = await fetch(verifyUrl, {
+    method: "POST",
+    body: formData,
+  });
+
+  const result: any = await response.json();
+  return result.success === true;
+}
+
+async function parseFormData(request: Request) : Promise<{contact: Contact, turnstileToken: string}> {
+  const contentType = request.headers.get("Content-Type") || "";
+
+  if (contentType.includes("application/json")) {
+    return await request.json();
+  } else if (contentType.includes("form-data") || contentType.includes("x-www-form-urlencoded")) {
+    const formData = await request.formData();
+    const contact: Contact = {
+      name: formData.get("name")?.toString(),
+      email: formData.get("email")?.toString(),
+      message: formData.get("message")?.toString()
+    }
+    return {
+      contact,
+      turnstileToken: formData.get("cf-turnstile-response")?.toString(),
+    };
+  }
+
+  return null;
+}
+
+function validateFormFields(contact: Contact, env: Env) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const minNameLength = env.MIN_NAME_LENGTH || 2;
+  const maxNameLength = env.MAX_NAME_LENGTH || 200;
+  const minMessageLength = env.MIN_MESSAGE_LENGTH || 10;
+  const maxMessageLength = env.MAX_MESSAGE_LENGTH || 500;
+
+  const {name, email, message} = contact;
+  if (!name || !email || !message) {
+    return { error: "Gelieve alle velden in te vullen" };
+  }
+
+  if (!emailRegex.test(email)) {
+    return { error: "Ongeld e-mail adres" };
+  }
+
+  if (name.length < minNameLength || name.length > maxNameLength) {
+    return { error: `Uw naam moet tussen ${minNameLength} en ${maxNameLength} tekens lang zijn` };
+  }
+
+  if (message.length < minMessageLength || message.length > maxMessageLength) {
+    return { error: `Uw vraag moet tussen  ${minMessageLength} en ${maxMessageLength} tekens lang zijn` };
+  }
+
+  return { valid: true };
+}
+
+function createEmailRequest({name, email, message}, token: string): Request {
+  const POSTMARK_URL = "https://api.postmarkapp.com/email";
+  return new Request(POSTMARK_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Postmark-Server-Token": token
+    },
+    body: JSON.stringify({
+      From: "contact@brabit.be",
+      To: "info@brabit.be",
+      Subject: "Contact verzoek",
+      HtmlBody: ``+
+      `<p>Naam: ${name}</p>`+
+      `<p>Email: ${email}</p>`+
+      `<p>Vraag: ${message}</p>`
+    })
+  });
+}
+
+export const onRequestPost: PagesFunction<Env> = async({request, env}) => {
+  const corsHeaders = getCorsHeaders(request, env);
+  try {
+    const clientIp = request.headers.get("CF-Connecting-IP") || "unknown";
+
+    // if (!env.CONTACT_SUBMISSIONS) {
+    //   return createJsonResponse(
+    //     { error: "Contact form is not configured properly. Please try again later." },
+    //     StatusCodes.SERVICE_UNAVAILABLE,
+    //     corsHeaders
+    //   );
+    // }
+
+    // const rateLimitResult = await checkRateLimit(env, clientIp);
+    // if (rateLimitResult.limited) {
+    //   return createJsonResponse(
+    //     { error: "Too many requests. Please try again later." },
+    //     StatusCodes.TOO_MANY_REQUESTS,
+    //     corsHeaders
+    //   );
+    // }
+
+    const {contact, turnstileToken} = await parseFormData(request);
+    if (!contact) {
+      return createJsonResponse({ error: "Geen contact info gevonden" }, StatusCodes.BAD_REQUEST, corsHeaders);
+    }
+    // Verify Turnstile token
+    if (!turnstileToken) {
+      return createJsonResponse(
+        { error: "Gelieve de security challenge te voltooien" },
+        StatusCodes.BAD_REQUEST,
+        corsHeaders
+      );
+    }
+
+    if (env.TURNSTILE_SECRET_KEY) {
+      const isValidToken = await verifyTurnstile(turnstileToken, env.TURNSTILE_SECRET_KEY, clientIp);
+      if (!isValidToken) {
+        return createJsonResponse(
+          { error: "Het lukte niet om de security challenge te verifiëren. Probeer opnieuw." },
+          StatusCodes.BAD_REQUEST,
+          corsHeaders
+        );
+      }
+    }
+    let { name, email, message } = contact;
+    name = (name || "").trim();
+    email = (email || "").trim();
+    message = (message || "").trim();
+
+    const validation = validateFormFields({name, email, message}, env);
+    if (validation.error) {
+      return createJsonResponse({ error: validation.error }, StatusCodes.BAD_REQUEST, corsHeaders);
+    }
+    const timestamp = Date.now();
+    const emailRequest = createEmailRequest(contact, env.POSTMARK_API_TOKEN);
+    const response = await fetch(emailRequest);
+    if (response.status != StatusCodes.OK) {
+      return createJsonResponse(
+        {
+          success: false,
+          message: "Er ging iets mis bij het versturen van de e-mail: " + (await response.json()),
+          timestamp: new Date(timestamp).toISOString()
+        },
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        corsHeaders
+      );
+    } else {
+      return createJsonResponse(
+        {
+          success: true,
+          message: "Uw bericht is successvol verzonden. Wij nemen snel contact met u op!",
+          timestamp: new Date(timestamp).toISOString()
+        },
+        StatusCodes.OK,
+        corsHeaders
+      );
+    }
+  } catch (error) {
+    console.error("Error processing contact form:", error);
+
+    return createJsonResponse(
+      { error: "Er heeft zich een interne fout voorgedaan. Probeer later opnieuw." },
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      corsHeaders
+    );
+  }
+}
