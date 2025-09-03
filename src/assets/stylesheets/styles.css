@@ -191,16 +191,22 @@ li {
     margin-left: 2rem;
 }
 
-.hero-overlay .container {
-    text-align: center;
-    color: light-dark(var(--light), var(--dark));
-    padding: 0 1rem;
+.hero-overlay {
+    display: flex;
+    align-items: center;
+}
+
+.hero-image, img {
+    max-width: 100%;
 }
 
 /* Mobile */
 
 @media (max-width: 768px) {
     .about-content {
+        flex-direction: column;
+    }
+    .hero-overlay {
         flex-direction: column;
     }
 }
