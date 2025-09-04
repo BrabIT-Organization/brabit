@@ -196,9 +196,35 @@ li {
     align-items: center;
 }
 
-.hero-image, img {
+.hero-image img {
     max-width: 100%;
-    height: 400px;
+    height: 500px;
+}
+
+/* Navigation */
+nav {  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    background-color: var(--standard-color);
+    padding: 1rem;
+}
+nav a {  
+   color: var(--light);
+   text-decoration: none;
+}
+
+/* Desktop specific */
+@media (min-width: 768px) {
+    nav {
+        padding: 2rem;
+        font-size: large;
+    }
+}
+
+@media desk {
+    
 }
 
 /* Mobile */
@@ -210,9 +236,12 @@ li {
     .hero-overlay {
         flex-direction: column;
     }
-    .hero-image, img {
+    .hero-image img {
         max-height: 100%;
         display:block;
         height: auto;
+    }
+    nav {
+        flex-direction: column;
     }
 }
