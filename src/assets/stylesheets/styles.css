@@ -129,6 +129,10 @@ header p {
     border: 1px solid light-dark(var(--light), var(--dark));
 }
 
+.testimonial p {
+    font-style: italic;
+}
+
 #contact form {
     max-width: 600px;
     margin: 0 auto;
