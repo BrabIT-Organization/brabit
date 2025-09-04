@@ -198,6 +198,7 @@ li {
 
 .hero-image, img {
     max-width: 100%;
+    height: 400px;
 }
 
 /* Mobile */
@@ -208,5 +209,10 @@ li {
     }
     .hero-overlay {
         flex-direction: column;
+    }
+    .hero-image, img {
+        max-height: 100%;
+        display:block;
+        height: auto;
     }
 }
