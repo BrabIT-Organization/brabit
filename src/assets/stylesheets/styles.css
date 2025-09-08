@@ -167,7 +167,7 @@ header p {
 
 footer {
     background: var(--standard-color);
-    color: light-dark(var(--dark), var(--light));
+    color: var(--light);
     text-align: center;
     padding: 2rem 0;
 }
