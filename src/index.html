@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>BrabIT | Freelance IT Consultants</title>
+        <meta name="description" content="Homepage BrabIT BV met introductie, diensten, reviews en contactformulier">
+        <title>BrabIT</title>
         <link rel="stylesheet" href="./assets/stylesheets/styles.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
         <link rel="icon" type="image/svg+xml" href="assets/images/company-logo-short.svg">
@@ -11,7 +12,14 @@
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" as="script" defer></script>
     </head>
     <body>
+        <nav>
+            <a href="#about"><i class="fa-solid fa-circle-info"></i> Over ons</a>
+            <a href="#services"><i class="fa-solid fa-question"></i> Onze diensten</a>
+            <a href="#testimonials"><i class="fa-solid fa-star"></i> Onze klanten</a>
+            <a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a>
+        </nav>
         <header>
+            
             <div class="hero-overlay">
                 <div class="container">
                     <picture class="hero-image">
@@ -22,7 +30,7 @@
                         <source srcset="./assets/images/company-logo-full-white.webp"  media="(prefers-color-scheme: dark)"/>
 
                         <!-- User has no color preference: -->
-                        <img src="./assets/images/company-logo-full-black.webp" alt="BrabIT Logo" style="max-width: 400px;">
+                        <img src="./assets/images/company-logo-full-black.webp" alt="BrabIT Logo" fetchpriority="high">
                     </picture>
                     <h1>Experten in IT consulting</h1>
                     <p>IT ondersteuning en advies op maat</p>
@@ -31,6 +39,35 @@
             </div>
         </header>
         
+        <section id="about">
+            <div class="container">
+                <h2>Over ons</h2>
+                <div class="about-content">
+                    <picture>
+                    <!-- User prefers light mode: -->
+                        <source srcset="./assets/images/company-logo-full-black.webp" media="(prefers-color-scheme: light)"/>
+
+                        <!-- User prefers dark mode: -->
+                        <source srcset="./assets/images/company-logo-full-white.webp"  media="(prefers-color-scheme: dark)"/>
+
+                        <!-- User has no color preference: -->
+                        <img src="./assets/images/company-logo-full-black.webp" alt="BrabIT Logo" fetchpriority="low">
+                    </picture>
+                    <div>
+                        <p>Met meer dan 6 jaar professionele ervaring en een passie voor IT gaan wij geen uitdaging uit de weg om naast onze klanten te werken en hen te begeleiden doorheen de uitdagingen van het IT-landschap.</p>
+                        <p>Wij specialiseren ons in:</p>
+                            <ul>
+                                <li>Klantenbeheersystemen (Salesforce, 9 certificaten);</li>
+                                <li>Netwerkoplossingen;</li>
+                                <li>Het stroomlijnen van IT-processen.</li>
+                            </ul>
+                            <p>Naast onze specialisaties staan wij klaar om onze klanten met raad en daad bij te staan.</p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="services">
             <div class="container">
                 <h2>Onze diensten</h2>
@@ -59,48 +96,26 @@
             </div>
         </section>
         
-        <section id="about">
-            <div class="container">
-                <h2>Over ons</h2>
-                <div class="about-content">
-                    <picture>
-                    <!-- User prefers light mode: -->
-                        <source srcset="./assets/images/company-logo-full-black.webp" media="(prefers-color-scheme: light)"/>
-
-                        <!-- User prefers dark mode: -->
-                        <source srcset="./assets/images/company-logo-full-white.webp"  media="(prefers-color-scheme: dark)"/>
-
-                        <!-- User has no color preference: -->
-                        <img src="./assets/images/company-logo-full-black.webp" alt="BrabIT Logo">
-                    </picture>
-                    <div>
-                        <p>Met meer dan 6 jaar professionele ervaring en een passie voor IT gaan wij geen uitdaging uit de weg om naast onze klanten te werken en hen te begeleiden doorheen de uitdagingen van het IT-landschap.</p>
-                        <p>Wij specialiseren ons in:</p>
-                            <ul>
-                                <li>Klantenbeheersystemen (Salesforce, 9 certificaten);</li>
-                                <li>Netwerkoplossingen;</li>
-                                <li>Het stroomlijnen van IT-processen.</li>
-                            </ul>
-                            <p>Naast onze specialisaties staan wij klaar om onze klanten met raad en daad bij te staan.</p>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
         <section id="testimonials">
             <div class="container">
                 <h2>Wat zeggen onze klanten?</h2>
                 <div class="testimonials-grid">
                     <div class="testimonial">
-                        <p>"Professional, responsive, and always delivers on time. A true IT partner."</p>
-                        <h4>- Lionel Gossa, Sibelga</h4>
+                        <p>"Olivier worked in my team for four years as a Salesforce Technical Analyst, with deep expertise in Service Cloud and Community. He played a key role in delivering major projects for Sibelga, including the successful launch of the Sibelga customer portal.
+<br>
+He also contributed actively to our corrective and evolutive maintenance efforts, always with professionalism and efficiency.<br>
+Olivier was a strong team player and helped foster a positive team dynamic.
+<br>
+I highly recommend him for any future role."</p>
+                        <h4>Lionel Gossa, Team Manager - Sibelga</h4>
                         <small><i class="fa-solid fa-location"></i>Brussel</small>
                     </div>
                     <div class="testimonial">
-                        <p>"BrabIT transformed our IT infrastructure, saving us time and money. Highly recommended!"</p>
-                        <h4>- Peter Flamey, Verhelst Flamey Advocaten</h4>
-                        <small><i class="fa-solid fa-location"></i>Antwerpen</small>
+                        <p>"Brabit heeft als IT-consultant de IT-transitie van twee gespecialiseerde advocatenkantoren efficiënt en accuraat opgevolgd ter ondersteuning, audit en controle van de bestaande externe IT ondersteuning. Ik kan deze firma enkel maar ten volle aanraden als IT-consultant voor complexe IT-operaties."</p>
+                        <p>
+                            <strong>Peter Flamey, Verhelst Flamey Advocaten</strong>
+                            <small><i class="fa-solid fa-location"></i>Antwerpen</small>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -138,9 +153,13 @@
                     <div
                         class="cf-turnstile"
                         data-sitekey="0x4AAAAAABw2sAPeIBnOtv1A"
+                        data-language="nl"
+                        data-size="flexible"
+                        data-appearance="interaction-only"
                     >
                     </div>
                     <button type="submit" class="btn">Stuur een bericht</button>
+                    <small>Door contact met ons op te nemen, verklaart u zich akkoord met onze <a href="/assets/docs/terms-and-conditions.pdf" target="_blank">algemene voorwaarden</a> en <a href="/assets/docs/privacy-statement.pdf" target="_blank">privacyverklaring</a>.</small>
                 </form>
                 <span id="result" style="display: none;"></span>
             </div>
@@ -149,12 +168,18 @@
         <footer>
             <div class="container">
                 <p>&copy; 2025 BrabIT BV. Alle rechten voorbehouden.</p>
-                <div class="social-links">
-                    <a href="https://www.linkedin.com/in/olivier-brabanders"><i class="fab fa-linkedin"></i></a>
+                <small>Velodroomstraat 2, 2200 Herentals</small>
+                <small>BTW BE1015217638</small>
+                <div class="links">
+                    <div class="social">
+                        <a href="https://www.linkedin.com/in/olivier-brabanders" target="_blank" aria-label="LinkedIn profile"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                    <a href="/assets/docs/terms-and-conditions.pdf" target="_blank"><small>Algemene voorwaarden</small></a>
+                    <a href="/assets/docs/privacy-statement.pdf" target="_blank"><small>Privacyverklaring</small></a>
                 </div>
             </div>
         </footer>
         
-        <script src="./assets/scripts/script.js"></script>
+        <script src="./assets/scripts/script.js" async></script>
     </body>
 </html>

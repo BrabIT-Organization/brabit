@@ -66,7 +66,7 @@ header p {
     border-radius: 5px;
     font-weight: bold;
     transition: all 0.3s;
-    border: 2px solid var(--light);
+    border: 2px solid light-dark(var(--dark), var(--light));
 }
 
 .btn:hover {
@@ -129,6 +129,10 @@ header p {
     border: 1px solid light-dark(var(--light), var(--dark));
 }
 
+.testimonial p {
+    font-style: italic;
+}
+
 #contact form {
     max-width: 600px;
     margin: 0 auto;
@@ -163,7 +167,7 @@ header p {
 
 footer {
     background: var(--standard-color);
-    color: light-dark(var(--dark), var(--light));
+    color: var(--light);
     text-align: center;
     padding: 2rem 0;
 }
@@ -172,35 +176,75 @@ footer p {
     color: var(--light);
 }
 
-.social-links {
+.links {
     margin-top: 1rem;
 }
 
-.social-links a {
+.links a {
     color: var(--light);
     margin: 0 0.5rem;
-    font-size: 1.5rem;
     transition: color 0.3s;
 }
 
-.social-links a:hover {
-    color: var(--dark);
+.social {
+    font-size: 1.5rem;
 }
 
 li {
     margin-left: 2rem;
 }
 
-.hero-overlay .container {
-    text-align: center;
-    color: light-dark(var(--light), var(--dark));
-    padding: 0 1rem;
+.hero-overlay {
+    display: flex;
+    align-items: center;
+}
+
+.hero-image img {
+    max-width: 100%;
+    height: 500px;
+}
+
+/* Navigation */
+nav {  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    background-color: var(--standard-color);
+    padding: 1rem;
+}
+nav a {  
+   color: var(--light);
+   text-decoration: none;
+}
+
+/* Desktop specific */
+@media (min-width: 768px) {
+    nav {
+        padding: 2rem;
+        font-size: large;
+    }
+}
+
+@media desk {
+    
 }
 
 /* Mobile */
 
 @media (max-width: 768px) {
     .about-content {
+        flex-direction: column;
+    }
+    .hero-overlay {
+        flex-direction: column;
+    }
+    .hero-image img {
+        max-height: 100%;
+        display:block;
+        height: auto;
+    }
+    nav {
         flex-direction: column;
     }
 }
